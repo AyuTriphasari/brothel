@@ -21,6 +21,12 @@ default reputation = None  # Initialized in script.rpy via Reputation()
 ## ─── Staff ───
 default staff_manager = None  # Initialized via StaffManager()
 
+## ─── Upgrades ───
+default upgrade_manager = None  # Initialized via UpgradeManager()
+
+## ─── Events ───
+default event_manager = None  # Initialized via EventManager()
+
 ## ─── Venue ───
 default venue_level = 1
 default venue_name = "The Nexus"

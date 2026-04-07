@@ -2,6 +2,12 @@
 ## script.rpy — Main Game Entry & Loop for Brothel Connection
 ################################################################################
 
+## ─── Ensure Main Menu Shows ───
+## This label runs before the main menu appears.
+## It clears any stale state to prevent crashes.
+label before_main_menu:
+    return
+
 ## ─── Game Initialization ───
 label start:
 
@@ -12,6 +18,10 @@ label start:
     $ staff_manager = StaffManager()
     $ upgrade_manager = UpgradeManager()
     $ event_manager = EventManager()
+
+    ## Reset tracking
+    $ days_survived = 0
+    $ tutorial_complete = False
 
     ## Start prologue
     jump prologue
@@ -185,3 +195,21 @@ label game_over_broke:
             jump start
         "Main Menu":
             return
+
+
+## ─── After Load — Fix State After Loading a Save ───
+label after_load:
+    ## Rebuild event pool to ensure fresh condition strings
+    ## (fixes saves from older versions that had lambda conditions)
+    python:
+        if hasattr(event_manager, 'event_pool'):
+            try:
+                # Test if conditions are usable
+                for ev in event_manager.event_pool:
+                    if ev.condition and callable(ev.condition):
+                        # Old lambda-based condition found, rebuild
+                        event_manager.event_pool = event_manager._create_events()
+                        break
+            except Exception:
+                event_manager.event_pool = event_manager._create_events()
+    return

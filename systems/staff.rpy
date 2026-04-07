@@ -5,7 +5,7 @@
 init python:
     import random as _random
 
-    class Staff:
+    class Staff(object):
         """Represents an individual staff member."""
 
         ROLES = ["Hostess", "Bartender", "Dancer", "Security", "Manager"]
@@ -124,7 +124,7 @@ init python:
                 return "{color=#666680}○ Off Duty{/color}"
 
 
-    class StaffManager:
+    class StaffManager(object):
         """Manages the entire roster of staff members."""
 
         MAX_ROSTER = 10

@@ -5,7 +5,7 @@
 init python:
     import random as _random
 
-    class GameEvent:
+    class GameEvent(object):
         """Represents a single game event."""
 
         def __init__(self, eid, title, description, event_type="random",
@@ -14,18 +14,34 @@ init python:
             self.title = title
             self.description = description
             self.event_type = event_type  # "random", "story", "crisis"
-            self.condition = condition    # lambda that checks if event can fire
+            self.condition = condition    # string condition e.g. "fame >= 100"
             self.choices = choices or []  # list of (text, effects_dict)
             self.effects = effects or {}  # auto-applied effects
             self.seen = False
 
         def can_trigger(self, clock, reputation, economy):
             if self.condition:
-                return self.condition(clock, reputation, economy)
+                return _eval_event_condition(self.condition, clock, reputation, economy)
             return True
 
 
-    class EventManager:
+    def _eval_event_condition(cond, clock, reputation, economy):
+        """Evaluate a string-based event condition safely."""
+        try:
+            return eval(cond, {"__builtins__": {}}, {
+                "fame": reputation.fame,
+                "quality": reputation.quality,
+                "danger": reputation.danger,
+                "money": economy.money,
+                "day": clock.day,
+                "is_weekend": clock.is_weekend,
+                "time_of_day": clock.time_of_day,
+            })
+        except Exception:
+            return False
+
+
+    class EventManager(object):
         """Dispatches events based on game state."""
 
         def __init__(self):
@@ -41,7 +57,7 @@ init python:
                     "rich_patron", "VIP Visitor",
                     "A wealthy corporate exec stumbles into your establishment, impressed by the ambiance.",
                     "random",
-                    condition=lambda c, r, e: r.fame >= 100,
+                    condition="fame >= 100",
                     choices=[
                         ("Roll out the red carpet", {"money": 500, "fame": 15}),
                         ("Treat them like anyone else", {"money": 200, "quality": 5}),
@@ -51,7 +67,7 @@ init python:
                     "media_buzz", "Media Attention",
                     "A popular net-blogger wants to feature your venue on their channel.",
                     "random",
-                    condition=lambda c, r, e: r.fame >= 200,
+                    condition="fame >= 200",
                     choices=[
                         ("Welcome them in", {"fame": 40, "danger": 5}),
                         ("Politely decline — stay underground", {"fame": 5, "danger": -5}),
@@ -80,7 +96,7 @@ init python:
                     "police_raid", "Police Inspection",
                     "Officers at the door. They want to 'inspect' the premises.",
                     "crisis",
-                    condition=lambda c, r, e: r.danger >= 30,
+                    condition="danger >= 30",
                     choices=[
                         ("Cooperate fully", {"money": -300, "danger": -20}),
                         ("Bribe them", {"money": -800, "danger": -10}),
@@ -91,7 +107,7 @@ init python:
                     "rival_sabotage", "Rival Sabotage",
                     "Someone's been spreading rumors about your venue. A rival's handiwork.",
                     "crisis",
-                    condition=lambda c, r, e: r.fame >= 300,
+                    condition="fame >= 300",
                     choices=[
                         ("Ignore it and let quality speak", {"fame": -15, "quality": 5}),
                         ("Launch a counter-campaign", {"money": -500, "fame": 10}),
@@ -111,7 +127,6 @@ init python:
                     "staff_conflict", "Staff Conflict",
                     "Two of your staff got into a heated argument in front of customers.",
                     "random",
-                    condition=lambda c, r, e: True,
                     choices=[
                         ("Mediate the conflict", {"staff_mood": -5, "quality": 5}),
                         ("Discipline both", {"staff_mood": -15, "quality": 10}),
@@ -133,7 +148,7 @@ init python:
                     "mysterious_offer", "Mysterious Offer",
                     "A shadowy figure approaches with a business proposition. Lucrative but risky.",
                     "random",
-                    condition=lambda c, r, e: c.day >= 7,
+                    condition="day >= 7",
                     choices=[
                         ("Accept the deal", {"money": 1000, "danger": 20}),
                         ("Decline politely", {"danger": -5}),

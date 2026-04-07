@@ -3,7 +3,7 @@
 ################################################################################
 
 init python:
-    class Upgrade:
+    class Upgrade(object):
         """Represents a single venue upgrade."""
 
         def __init__(self, uid, name, description, cost, category,
@@ -47,7 +47,7 @@ init python:
             return ", ".join(parts) if parts else "Cosmetic"
 
 
-    class UpgradeManager:
+    class UpgradeManager(object):
         """Manages all venue upgrades."""
 
         CATEGORIES = {

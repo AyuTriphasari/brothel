@@ -3,7 +3,7 @@
 ################################################################################
 
 init python:
-    class Reputation:
+    class Reputation(object):
         """Tracks the venue's public reputation and standing."""
 
         TIERS = [

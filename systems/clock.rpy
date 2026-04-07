@@ -3,7 +3,7 @@
 ################################################################################
 
 init python:
-    class GameClock:
+    class GameClock(object):
         """Manages the flow of time in Brothel Connection."""
 
         PERIODS = ["Morning", "Afternoon", "Evening", "Night"]

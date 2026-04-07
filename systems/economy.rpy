@@ -3,7 +3,7 @@
 ################################################################################
 
 init python:
-    class Economy:
+    class Economy(object):
         """Manages all finances for Brothel Connection."""
 
         def __init__(self, starting_money=5000):
