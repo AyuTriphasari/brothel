@@ -1,0 +1,3 @@
+plan buiild renpy game simulation, title: brothel connection
+custom gui theme, modern, dark mode, neon color, cyberpunk style
+
