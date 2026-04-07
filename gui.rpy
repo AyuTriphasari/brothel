@@ -75,7 +75,7 @@ define gui.game_menu_background = "gui/game_menu.png"
 ################################################################################
 
 define gui.dialogue_xpos = 402
-define gui.dialogue_ypos = 2
+define gui.dialogue_ypos = 60
 define gui.dialogue_width = 1116
 define gui.dialogue_text_xalign = 0.0
 
