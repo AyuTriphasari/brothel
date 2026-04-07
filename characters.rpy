@@ -19,7 +19,7 @@ define narrator = Character(None,
 )
 
 ## ─── System Messages ───
-define system = Character("{font=fonts/ShareTechMono-Regular.ttf}{size=22}{color=#666680}[SYSTEM]{/color}{/size}{/font}",
+define system = Character("{font=fonts/ShareTechMono-Regular.ttf}{size=22}{color=#666680}[[SYSTEM]{/color}{/size}{/font}",
     what_font="fonts/ShareTechMono-Regular.ttf",
     what_size=24,
     what_color="#888899",
